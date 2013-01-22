@@ -263,4 +263,5 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<packaging>war</packaging>
 </project>
