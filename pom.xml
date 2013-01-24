@@ -21,11 +21,6 @@
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>emodroid-cloudbees-release</id>
-			<name>emodroid-cloudbees-release</name>
-			<url>https://repository-emodroid.forge.cloudbees.com/release/</url>
-		</repository>
 
 		<repository>
 			<id>central</id>
@@ -51,7 +46,12 @@
 				<updatePolicy>never</updatePolicy>
 			</releases>
 		</repository>
-
+		
+		<repository>
+			<id>emodroid-cloudbees-release</id>
+			<name>emodroid-cloudbees-release</name>
+			<url>https://repository-emodroid.forge.cloudbees.com/release/</url>
+		</repository>
 	</repositories>
 
 
