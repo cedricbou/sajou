@@ -49,9 +49,11 @@
 		<property name="database" value="HSQL" />
 	</bean>
 
-	<beans profile="production">
+	<beans profile="mangods">
 		<mango:datasource id="dataSource" />
+	</beans>
 
+	<beans profile="mysql">
 		<bean id="jpaVendorAdapter"
 			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 			<property name="database" value="MYSQL" />
@@ -59,8 +61,6 @@
 	</beans>
 
 	<beans profile="heroku">
-		<mango:datasource id="dataSource" />
-
 		<bean id="jpaVendorAdapter"
 			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 			<property name="database" value="POSTGRESQL" />
