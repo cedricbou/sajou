@@ -22,16 +22,36 @@
 
 	<repositories>
 		<repository>
-			<id>emodroid-cloudbees-snapshot</id>
-			<name>emodroid-cloudbees-snapshot</name>
-			<url>https://repository-emodroid.forge.cloudbees.com/snapshot/</url>
-		</repository>
-
-		<repository>
 			<id>emodroid-cloudbees-release</id>
 			<name>emodroid-cloudbees-release</name>
 			<url>https://repository-emodroid.forge.cloudbees.com/release/</url>
 		</repository>
+
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<layout>default</layout>
+			<url>http://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>caucho</id>
+			<name>Caucho Repository</name>
+			<url>http://caucho.com/m2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</repository>
+
 	</repositories>
 
 
