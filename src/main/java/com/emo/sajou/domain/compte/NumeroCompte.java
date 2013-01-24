@@ -13,6 +13,10 @@ public class NumeroCompte {
 	public NumeroCompte() {
 		compte = UUID.randomUUID().toString();
 	}
+	
+	public NumeroCompte(final String numero) {
+		this.compte = numero;
+	}
 
 	public String getCompte() {
 		return compte;

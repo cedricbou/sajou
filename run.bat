@@ -1,0 +1,1 @@
+java -Dspring.profiles.active="production" -jar target/dependency/jetty-runner.jar target/*.war
