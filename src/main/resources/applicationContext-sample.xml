@@ -57,4 +57,13 @@
 			<property name="database" value="MYSQL" />
 		</bean>
 	</beans>
+
+	<beans profile="heroku">
+		<mango:datasource id="dataSource" />
+
+		<bean id="jpaVendorAdapter"
+			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+			<property name="database" value="POSTGRESQL" />
+		</bean>
+	</beans>
 </beans>
