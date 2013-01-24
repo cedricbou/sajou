@@ -33,7 +33,7 @@ public class QueriesIntegration {
 
 	@Inject
 	private Cartouches cartouches;
-	
+
 	@Test
 	public void testerCartoucheQuery() throws DuplicateException {
 		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
@@ -50,15 +50,35 @@ public class QueriesIntegration {
 				"something")));
 		deposer.deposer(compte, 35, Period.months(12), new Usage(new Service(
 				"something")));
+		for (int i = 0; i < 30; ++i) {
+			deposer.deposer(compte, 35 + i, Period.months(12 + i), new Usage(
+					new Service("cool")));
+		}
 
-		final QueryExecutor<?> e = cqs.system().queryExecutor(CartoucheQuery.class.getSimpleName());
-		
+		final QueryExecutor<?> e = cqs.system().queryExecutor(
+				CartoucheQuery.class.getSimpleName());
+
 		@SuppressWarnings("unchecked")
-		List<CartoucheQuery> cartouches = (List<CartoucheQuery>)e.query();
-		
-		for(final CartoucheQuery c : cartouches) {
+		List<CartoucheQuery> cartouches = (List<CartoucheQuery>) e.query();
+
+		for (final CartoucheQuery c : cartouches) {
 			assertEquals(compte.getCompte(), c.compte);
 		}
+
+		final long items = e.countItems();
+		final int pages = e.countPages(10);
+		final List<CartoucheQuery> pagedCartouche = (List<CartoucheQuery>) e.pagedQuery(2, 10);
+	
+		assertEquals(33, items);
+		assertEquals(4, pages);
+		
+		int i = 0;
+		for (final CartoucheQuery c : pagedCartouche) {
+			assertEquals(compte.getCompte(), c.compte);
+			assertEquals(35 + 10 - 3 + i, c.solde);
+			++i;
+		}
+
 	}
 
 }
