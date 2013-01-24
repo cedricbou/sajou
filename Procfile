@@ -1,0 +1,1 @@
+web:	java $JAVA_OPTS -Dmango.profile="heroku" -Dspring.profiles.active="mangods,heroku" -jar target/dependency/jetty-runner.jar --port $PORT target/*.war
