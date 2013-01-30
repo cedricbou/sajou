@@ -1,1 +1,1 @@
-java -Dmango.profile="heroku" -Dspring.profiles.active="mangods,heroku" -jar target/dependency/jetty-runner.jar target/*.war
+java -Dmango.profile="" -Dspring.profiles.active="mangods,mysql" -jar target/dependency/jetty-runner.jar target/*.war

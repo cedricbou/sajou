@@ -25,7 +25,7 @@ import com.emo.sajou.queries.CartoucheQuery;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext-init.xml")
-@ActiveProfiles(profiles = "production")
+@ActiveProfiles(profiles = {"mangods", "mysql"})
 public class QueriesIntegration {
 
 	@Inject

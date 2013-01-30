@@ -27,7 +27,7 @@ import com.emo.sajou.domain.compte.NumeroCompte;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext-init.xml")
-@ActiveProfiles(profiles = "production")
+@ActiveProfiles(profiles = {"mangods", "mysql"})
 public class CompteIntegration {
 
 	@Inject
