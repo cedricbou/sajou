@@ -59,15 +59,15 @@ public class QueriesIntegration {
 				CartoucheQuery.class.getSimpleName());
 
 		@SuppressWarnings("unchecked")
-		List<CartoucheQuery> cartouches = (List<CartoucheQuery>) e.query();
+		List<CartoucheQuery> cartouches = (List<CartoucheQuery>) e.query(compte.getCompte());
 
 		for (final CartoucheQuery c : cartouches) {
 			assertEquals(compte.getCompte(), c.compte);
 		}
 
-		final long items = e.countItems();
-		final int pages = e.countPages(10);
-		final List<CartoucheQuery> pagedCartouche = (List<CartoucheQuery>) e.pagedQuery(2, 10);
+		final long items = e.countItems(compte.getCompte());
+		final int pages = e.countPages(10, compte.getCompte());
+		final List<CartoucheQuery> pagedCartouche = (List<CartoucheQuery>) e.pagedQuery(2, 10, compte.getCompte());
 	
 		assertEquals(33, items);
 		assertEquals(4, pages);
