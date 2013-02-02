@@ -1,6 +1,6 @@
 package sajou.integration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -21,7 +21,8 @@ import com.emo.sajou.domain.cartouche.Cartouches;
 import com.emo.sajou.domain.commons.Service;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
-import com.emo.sajou.queries.CartoucheQuery;
+import com.emo.sajou.queries.CartoucheJpql;
+import com.emo.sajou.queries.CartoucheSql;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext-init.xml")
@@ -35,7 +36,7 @@ public class QueriesIntegration {
 	private Cartouches cartouches;
 
 	@Test
-	public void testerCartoucheQuery() throws DuplicateException {
+	public void testerCartoucheJpql() throws DuplicateException {
 		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
 
 		final Service cool = new Service("cool");
@@ -56,26 +57,74 @@ public class QueriesIntegration {
 		}
 
 		final QueryExecutor<?> e = cqs.system().queryExecutor(
-				CartoucheQuery.class.getSimpleName());
+				CartoucheJpql.class.getSimpleName());
 
 		@SuppressWarnings("unchecked")
-		List<CartoucheQuery> cartouches = (List<CartoucheQuery>) e.query(compte.getCompte());
+		List<CartoucheJpql> cartouches = (List<CartoucheJpql>) e.query(compte.getCompte());
 
-		for (final CartoucheQuery c : cartouches) {
+		for (final CartoucheJpql c : cartouches) {
 			assertEquals(compte.getCompte(), c.compte);
 		}
 
 		final long items = e.countItems(compte.getCompte());
 		final int pages = e.countPages(10, compte.getCompte());
-		final List<CartoucheQuery> pagedCartouche = (List<CartoucheQuery>) e.pagedQuery(2, 10, compte.getCompte());
+		final List<CartoucheJpql> pagedCartouche = (List<CartoucheJpql>) e.pagedQuery(2, 10, compte.getCompte());
 	
 		assertEquals(33, items);
 		assertEquals(4, pages);
 		
 		int i = 0;
-		for (final CartoucheQuery c : pagedCartouche) {
+		for (final CartoucheJpql c : pagedCartouche) {
 			assertEquals(compte.getCompte(), c.compte);
 			assertEquals(35 + 10 - 3 + i, c.solde);
+			++i;
+		}
+
+	}
+
+	
+	@Test
+	public void testerCartoucheSql() throws DuplicateException {
+		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
+
+		final Service cool = new Service("cool");
+		final Service great = new Service("great");
+		final Usage envie = new Usage(cool, great);
+
+		final NumeroCompte compte = new NumeroCompte();
+		final long n = 10 + Math.round(Math.random() * 100);
+
+		deposer.deposer(compte, n, Period.months(12), envie);
+		deposer.deposer(compte, 25, Period.months(6), new Usage(new Service(
+				"something")));
+		deposer.deposer(compte, 35, Period.months(12), new Usage(new Service(
+				"something")));
+		for (int i = 0; i < 30; ++i) {
+			deposer.deposer(compte, 35 + i, Period.months(12 + i), new Usage(
+					new Service("cool")));
+		}
+
+		final QueryExecutor<?> e = cqs.system().queryExecutor(
+				CartoucheSql.class.getSimpleName());
+
+		@SuppressWarnings("unchecked")
+		List<CartoucheSql> cartouches = (List<CartoucheSql>) e.query(compte.getCompte());
+
+		for (final CartoucheSql c : cartouches) {
+			assertEquals(compte.getCompte(), c.compte);
+		}
+
+		final long items = e.countItems(compte.getCompte());
+		final int pages = e.countPages(10, compte.getCompte());
+		final List<CartoucheSql> pagedCartouche = (List<CartoucheSql>) e.pagedQuery(2, 10, compte.getCompte());
+	
+		assertEquals(33, items);
+		assertEquals(4, pages);
+		
+		int i = 0;
+		for (final CartoucheSql c : pagedCartouche) {
+			assertEquals(compte.getCompte(), c.compte);
+			assertEquals(new Long(35 + 10 - 3 + i), c.solde);
 			++i;
 		}
 
