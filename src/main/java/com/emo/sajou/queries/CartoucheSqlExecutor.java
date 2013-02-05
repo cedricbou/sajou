@@ -10,8 +10,8 @@ import com.emo.mango.spring.query.annotations.Sql;
 import com.emo.mango.spring.query.support.SqlExecutor;
 
 @Component
-@Sql(sql = "from Cartouche c where c.compte = ?", clazz=CartoucheSql.class)
-@QueryParams("compte")
+@Sql(sql = "from Cartouche c where c.compte = ? and c.solde > ?", clazz=CartoucheSql.class)
+@QueryParams({"compte", "soldeMin"})
 public class CartoucheSqlExecutor extends SqlExecutor<CartoucheSql> {
 	
 	@Inject
