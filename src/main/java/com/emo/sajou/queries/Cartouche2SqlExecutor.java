@@ -1,5 +1,9 @@
 package com.emo.sajou.queries;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -9,20 +13,27 @@ import com.emo.mango.spring.query.annotations.QueryClass;
 import com.emo.mango.spring.query.annotations.Sql;
 import com.emo.mango.spring.query.support.SqlExecutor;
 import com.emo.sajou.queries.Cartouche2SqlExecutor.SearchCartouche;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component
-@Sql(sql = "from Cartouche c where c.compte = :compte", clazz=CartoucheSql.class, name="Cartouche2Sql")
+@Sql(sql = "from Cartouche c where c.compte in (:comptes)", clazz=CartoucheSql.class, name="Cartouche2Sql")
 @QueryClass(SearchCartouche.class)
 public class Cartouche2SqlExecutor extends SqlExecutor<CartoucheSql> {
 	
 	public static class SearchCartouche {
 		
-		public final String compte;
+		public final Set<String> comptes;
 		
-		public SearchCartouche(final String compte) {
-			this.compte = compte;
+		@JsonCreator
+		public SearchCartouche(final @JsonProperty("comptes") Set<String> comptes) {
+			this.comptes = comptes;
 		}
 		
+		
+		public SearchCartouche(final String... comptes) {
+			this.comptes = new HashSet<String>(Arrays.asList(comptes));
+		}
 	}
 	
 	@Inject
