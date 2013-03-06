@@ -13,7 +13,7 @@ import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
 
 @Component
-@CommandHandler(DeposerPourUnUsage.class)
+@CommandHandler(command = DeposerPourUnUsage.class)
 public class DeposerPourUnUsageHandler implements Handler<DeposerPourUnUsage>{
 
 	private @Inject DeposerSurCompte deposer;
@@ -25,7 +25,7 @@ public class DeposerPourUnUsageHandler implements Handler<DeposerPourUnUsage>{
 			usage = usage.withService(new Service(cmd.services[i]));
 		}
 		
-		deposer.deposer(new NumeroCompte(cmd.compte),
+		deposer.deposer(new NumeroCompte(cmd.numeroCompte),
 			cmd.montant,
 			Period.months(cmd.validiteEnMois),
 			usage);

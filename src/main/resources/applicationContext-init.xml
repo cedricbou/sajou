@@ -9,8 +9,11 @@
 
 	<context:component-scan base-package="com.emo.sajou.commands" />
 	<context:component-scan base-package="com.emo.sajou.domain" />
-	
-	<mango:cqs />
+
+	<mango:cqs>
+		<mango:query-scan package="com.emo.sajou.queries" with-datasource="dataSource" with-entitymanager-provider="entityManagerProvider" />
+	</mango:cqs>
+ 	
 	<mango:config />
 	
 	<import resource="classpath:applicationContext-sample.xml" />

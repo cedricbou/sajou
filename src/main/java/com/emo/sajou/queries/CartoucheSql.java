@@ -1,6 +1,6 @@
 package com.emo.sajou.queries;
 
-import com.emo.mango.spring.query.annotations.Query;
+import com.emo.mango.cqs.queries.annotations.QueryMap;
 
 public class CartoucheSql {
 	public final String creation;
@@ -10,12 +10,12 @@ public class CartoucheSql {
 	public final Long solde;
 	public final String validite;
 
-	public CartoucheSql(@Query("c.creationDate") String creation,
-		@Query("c.cartoucheId") String id, 
-		@Query("c.servicesAsString") String usage, 
-		@Query("c.compte") String compte, 
-		@Query("c.solde") Long solde,
-		@Query("c.validite") String validite) {
+	public CartoucheSql(@QueryMap("c.creationDate") String creation,
+		@QueryMap("c.cartoucheId") String id, 
+		@QueryMap("c.servicesAsString") String usage, 
+		@QueryMap("c.compte") String compte, 
+		@QueryMap("c.solde") Long solde,
+		@QueryMap("c.validite") String validite) {
 		
 		this.id = id;
 		this.usage = usage;

@@ -12,7 +12,7 @@ public class DeposerPourUnUsage {
 
 	@NotNull
 	@MinLength(3)
-	public final String compte;
+	public final String numeroCompte;
 
 	@Min(1)
 	public final long montant;
@@ -25,11 +25,11 @@ public class DeposerPourUnUsage {
 	public final String[] services;
 
 	@JsonCreator
-	public DeposerPourUnUsage(final @JsonProperty("compte") String compte,
+	public DeposerPourUnUsage(final @JsonProperty("numeroCompte") String compte,
 			final @JsonProperty("montant") long montant,
 			final @JsonProperty("validiteEnMois") int validiteEnMois,
 			final @JsonProperty("services") String[] services) {
-		this.compte = compte;
+		this.numeroCompte = compte;
 		this.montant = montant;
 		this.validiteEnMois = validiteEnMois;
 		this.services = services;

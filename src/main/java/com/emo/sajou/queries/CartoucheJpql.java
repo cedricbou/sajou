@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 
-import com.emo.mango.spring.query.annotations.Query;
+import com.emo.mango.cqs.queries.annotations.QueryMap;
 
 public class CartoucheJpql {
 	public final String creation;
@@ -14,12 +14,12 @@ public class CartoucheJpql {
 	public final long solde;
 	public final String validite;
 
-	public CartoucheJpql(@Query("c.creationDate") DateTime creation,
-		@Query("c.id.id") String id, 
-		@Query("c.usage.servicesAsString") String usage, 
-		@Query("c.numeroCompte.compte") String compte, 
-		@Query("c.solde.solde") long solde,
-		@Query("c.validite") LocalDate validite) {
+	public CartoucheJpql(@QueryMap("c.creationDate") DateTime creation,
+		@QueryMap("c.id.id") String id, 
+		@QueryMap("c.usage.servicesAsString") String usage, 
+		@QueryMap("c.numeroCompte.compte") String compte, 
+		@QueryMap("c.solde.solde") long solde,
+		@QueryMap("c.validite") LocalDate validite) {
 		
 		this.id = id;
 		this.usage = usage;
