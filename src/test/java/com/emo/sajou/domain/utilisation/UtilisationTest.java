@@ -9,22 +9,25 @@ import com.emo.sajou.domain.cartouche.CartoucheId;
 import com.emo.sajou.domain.commons.Service;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.OperationId;
 
 public class UtilisationTest {
 	private final NumeroCompte compte = new NumeroCompte();
 	private final CartoucheId cartoucheId = new CartoucheId();
 	private final Usage usage = new Usage();
-	private final Utilisation u = new Utilisation(compte, cartoucheId, 30, usage);
+	private final OperationId operationId = new OperationId();
+	
+	private final Utilisation u = new Utilisation(compte, cartoucheId, 30, usage, operationId);
 
 	@Test
 	public void testHashCode() {
-		final Utilisation u0 = new Utilisation(compte, cartoucheId, 30, usage);
+		final Utilisation u0 = new Utilisation(compte, cartoucheId, 30, usage, operationId);
 		assertEquals(u0.hashCode(), u.hashCode());
 
-		final Utilisation u1 = new Utilisation(compte, cartoucheId, 30, new Usage(new Service("foo")));
-		final Utilisation u2 = new Utilisation(compte, cartoucheId, 50, usage);
-		final Utilisation u3 = new Utilisation(compte, new CartoucheId(), 30, usage);
-		final Utilisation u4 = new Utilisation(new NumeroCompte(), cartoucheId, 30, usage);
+		final Utilisation u1 = new Utilisation(compte, cartoucheId, 30, new Usage(new Service("foo")), operationId);
+		final Utilisation u2 = new Utilisation(compte, cartoucheId, 50, usage, operationId);
+		final Utilisation u3 = new Utilisation(compte, new CartoucheId(), 30, usage, operationId);
+		final Utilisation u4 = new Utilisation(new NumeroCompte(), cartoucheId, 30, usage, operationId);
 
 		assertFalse(u1.hashCode() == u.hashCode());
 		assertFalse(u2.hashCode() == u.hashCode());
@@ -55,16 +58,16 @@ public class UtilisationTest {
 
 	@Test
 	public void testUtilisationEgalite() {
-		final Utilisation u1 = new Utilisation(compte, cartoucheId, 30, usage);
+		final Utilisation u1 = new Utilisation(compte, cartoucheId, 30, usage, operationId);
 		assertEquals(u, u1);
 	}
 
 	@Test
 	public void testUtilisationNonEgalite() {
-		final Utilisation u1 = new Utilisation(compte, cartoucheId, 30, new Usage(new Service("foo")));
-		final Utilisation u2 = new Utilisation(compte, cartoucheId, 50, usage);
-		final Utilisation u3 = new Utilisation(compte, new CartoucheId(), 30, usage);
-		final Utilisation u4 = new Utilisation(new NumeroCompte(), cartoucheId, 30, usage);
+		final Utilisation u1 = new Utilisation(compte, cartoucheId, 30, new Usage(new Service("foo")), operationId);
+		final Utilisation u2 = new Utilisation(compte, cartoucheId, 50, usage, operationId);
+		final Utilisation u3 = new Utilisation(compte, new CartoucheId(), 30, usage, operationId);
+		final Utilisation u4 = new Utilisation(new NumeroCompte(), cartoucheId, 30, usage, operationId);
 		
 		assertFalse(u.equals(u1));
 		assertFalse(u.equals(u2));

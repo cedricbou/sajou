@@ -16,6 +16,7 @@ import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.Compte;
 import com.emo.sajou.domain.compte.NonSolvableException;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.Operation;
 
 public class UtilisationPlanTest {
 
@@ -35,7 +36,7 @@ public class UtilisationPlanTest {
 		
 		final Compte compte = new Compte(Arrays.asList(c1, c2, c3, c4, c5));
 
-		final UtilisationPlan plan = new UtilisationPlan(compte, 300, new Usage(new Service("bar")));
+		final UtilisationPlan plan = new UtilisationPlan(compte, new Operation(numero, new Usage(new Service("bar")), 300));
 				
 		try {
 			plan.utilisations();
@@ -59,12 +60,13 @@ public class UtilisationPlanTest {
 		
 		final Compte compte = new Compte(Arrays.asList(c1, c2, c3, c4, c5));
 
-		final UtilisationPlan plan = new UtilisationPlan(compte, 130, new Usage(new Service("bar")));
+		final Operation op = new Operation(numero, new Usage(new Service("bar")), 130);
+		final UtilisationPlan plan = new UtilisationPlan(compte, op);
 				
 		try {
-			final List<Utilisation> expected = Arrays.asList( new Utilisation(numero, c4.getId(), 50, new Usage(new Service("bar"))),
-					new Utilisation(numero, c5.getId(), 50, new Usage(new Service("bar"))),
-					new Utilisation(numero, c2.getId(), 30, new Usage(new Service("bar"))));
+			final List<Utilisation> expected = Arrays.asList(new Utilisation(numero, c4.getId(), 50, new Usage(new Service("bar")), op.getId()),
+					new Utilisation(numero, c5.getId(), 50, new Usage(new Service("bar")), op.getId()),
+					new Utilisation(numero, c2.getId(), 30, new Usage(new Service("bar")), op.getId()));
 			
 			Assert.assertArrayEquals(expected.toArray(), plan.utilisations().toArray());
 		} catch(NonSolvableException nse) {

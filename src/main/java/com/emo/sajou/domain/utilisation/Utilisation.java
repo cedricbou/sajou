@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.emo.mango.annotations.Final;
 import com.emo.sajou.domain.cartouche.CartoucheId;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.OperationId;
 
 @Entity
 public class Utilisation {
@@ -22,23 +24,27 @@ public class Utilisation {
 	private DateTime creationDate = DateTime.now();
 
 	@Embedded
-	private /* should be final */ NumeroCompte numeroCompte;
+	private @Final NumeroCompte numeroCompte;
 	
 	@Embedded
-	private /* should be final */ CartoucheId cartoucheId;
+	private @Final CartoucheId cartoucheId;
 	
 	@Embedded
-	private /* should be final */ Usage usage;
+	private @Final Usage usage;
 	
 	@Column(nullable=false)
-	private /* should be final */ long montant;
-
+	private @Final long montant;
+	
+	@Embedded
+	private @Final OperationId operationId;
+	
 	public Utilisation(final NumeroCompte numeroCompte,
-			final CartoucheId cartoucheId, final long montant, final Usage usage) {
+			final CartoucheId cartoucheId, final long montant, final Usage usage, final OperationId operationId) {
 		this.numeroCompte = numeroCompte;
 		this.cartoucheId = cartoucheId;
 		this.usage = usage;
 		this.montant = montant;
+		this.operationId = operationId;
 	}
 
 	public NumeroCompte getNumeroCompte() {
@@ -60,10 +66,14 @@ public class Utilisation {
 	public long getMontant() {
 		return montant;
 	}
+	
+	public OperationId getOperationId() {
+		return operationId;
+	}
 
 	@Override
 	public int hashCode() {
-		return new Long(numeroCompte.hashCode() + cartoucheId.hashCode() + usage.hashCode() + montant).hashCode();
+		return new Long(numeroCompte.hashCode() + cartoucheId.hashCode() + usage.hashCode() + montant + operationId.hashCode()).hashCode();
 	}
 
 	@Override
@@ -72,7 +82,8 @@ public class Utilisation {
 			&& numeroCompte.equals(((Utilisation)obj).numeroCompte)
 			&& cartoucheId.equals(((Utilisation)obj).cartoucheId)
 			&& usage.equals(((Utilisation)obj).usage)
-			&& montant == (((Utilisation)obj).montant);
+			&& montant == (((Utilisation)obj).montant)
+			&& operationId.equals(((Utilisation)obj).operationId);
 	}
 	
 	// For JPA use.

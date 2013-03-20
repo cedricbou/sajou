@@ -23,6 +23,9 @@ import com.emo.sajou.domain.commons.SoldePourUsage;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NonSolvableException;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.Operation;
+import com.emo.sajou.domain.operation.OperationId;
+import com.emo.sajou.domain.operation.Operations;
 import com.emo.sajou.domain.utilisation.Utilisation;
 import com.emo.sajou.domain.utilisation.Utilisations;
 
@@ -209,10 +212,11 @@ public class CompteBddTest {
 	public void utiliserDesJetonsToutUsage() {
 		final Cartouches cartouches = Mockito.mock(Cartouches.class);
 		final Utilisations utilisations = Mockito.mock(Utilisations.class);
+		final Operations operations = Mockito.mock(Operations.class);
 		
 		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
 		final SoldeCompte soldeCompte = new SoldeCompte(cartouches);
-		final UtiliserCompte utiliserCompte = new UtiliserCompte(cartouches, utilisations);
+		final UtiliserCompte utiliserCompte = new UtiliserCompte(cartouches, utilisations, operations);
 		
 		final TestMillisProvider timeProvider = new TestMillisProvider();
 		DateTimeUtils.setCurrentMillisProvider(timeProvider);
@@ -232,12 +236,14 @@ public class CompteBddTest {
 		assertEquals(montant, soldeCompte.solde(numero, usage));
 		
 		try {
-			utiliserCompte.utiliser(numero, 28, usage);
-			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 28, usage));
+			final Operation op1 = new Operation(numero, usage, 28);
+			utiliserCompte.utiliser(op1);
+			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 28, usage, op1.getId()));
 			assertEquals(37 - 28, soldeCompte.solde(numero, usage));
 
-			utiliserCompte.utiliser(numero, 37 - 28, usage);
-			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 37 - 28, usage));
+			final Operation op2 = new Operation(numero, usage, 37 - 28);
+			utiliserCompte.utiliser(op2);
+			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 37 - 28, usage, op2.getId()));
 			assertEquals(0, soldeCompte.solde(numero, usage));
 		}
 		catch(NonSolvableException nse) {
@@ -249,10 +255,11 @@ public class CompteBddTest {
 	public void utiliserDesJetonsPourUsageSpecifique() {
 		final Cartouches cartouches = Mockito.mock(Cartouches.class);
 		final Utilisations utilisations = Mockito.mock(Utilisations.class);
-		
+		final Operations operations = Mockito.mock(Operations.class);
+				
 		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
 		final SoldeCompte soldeCompte = new SoldeCompte(cartouches);
-		final UtiliserCompte utiliserCompte = new UtiliserCompte(cartouches, utilisations);
+		final UtiliserCompte utiliserCompte = new UtiliserCompte(cartouches, utilisations, operations);
 		
 		final TestMillisProvider timeProvider = new TestMillisProvider();
 		DateTimeUtils.setCurrentMillisProvider(timeProvider);
@@ -274,16 +281,19 @@ public class CompteBddTest {
 		assertEquals(montant, soldeCompte.solde(numero, usage));
 		
 		try {
-			utiliserCompte.utiliser(numero, 14, new Usage(great));
-			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 14, new Usage(great)));
+			final Operation op1 = new Operation(numero, new Usage(great), 14);
+			utiliserCompte.utiliser(op1);
+			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 14, new Usage(great), op1.getId()));
 			assertEquals(37 - 14, soldeCompte.solde(numero, usage));
 
-			utiliserCompte.utiliser(numero, 14, new Usage(cool));
-			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 14, new Usage(cool)));
+			final Operation op2 = new Operation(numero, new Usage(cool), 14);
+			utiliserCompte.utiliser(op2);
+			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 14, new Usage(cool), op2.getId()));
 			assertEquals(37 - 14 - 14, soldeCompte.solde(numero, usage));
 
-			utiliserCompte.utiliser(numero, 37 - 14 - 14, usage);
-			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 37 - 14 - 14, usage));
+			final Operation op3 = new Operation(numero, usage, 37 - 14 - 14);
+			utiliserCompte.utiliser(op3);
+			Mockito.verify(utilisations).save(new Utilisation(numero, expected.getId(), 37 - 14 - 14, usage, op3.getId()));
 			assertEquals(0, soldeCompte.solde(numero, usage));
 		}
 		catch(NonSolvableException nse) {
@@ -295,10 +305,11 @@ public class CompteBddTest {
 	public void utiliserDesJetonsSansSoldes() {
 		final Cartouches cartouches = Mockito.mock(Cartouches.class);
 		final Utilisations utilisations = Mockito.mock(Utilisations.class);
-		
+		final Operations operations = Mockito.mock(Operations.class);
+				
 		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
 		final SoldeCompte soldeCompte = new SoldeCompte(cartouches);
-		final UtiliserCompte utiliserCompte = new UtiliserCompte(cartouches, utilisations);
+		final UtiliserCompte utiliserCompte = new UtiliserCompte(cartouches, utilisations, operations);
 		
 		final TestMillisProvider timeProvider = new TestMillisProvider();
 		DateTimeUtils.setCurrentMillisProvider(timeProvider);
@@ -318,7 +329,7 @@ public class CompteBddTest {
 		assertEquals(montant, soldeCompte.solde(numero, usage));
 		
 		try {
-			utiliserCompte.utiliser(numero, 44, usage);
+			utiliserCompte.utiliser(new Operation(numero, usage, 44));
 			fail("Utiliser le compte aurait du échouer, il n'est pas solvable, on ne peut pas l'utiliser.");
 		}
 		catch(NonSolvableException nse) {

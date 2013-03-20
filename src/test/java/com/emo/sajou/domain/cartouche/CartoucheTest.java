@@ -17,6 +17,7 @@ import com.emo.sajou.domain.commons.Service;
 import com.emo.sajou.domain.commons.Solde;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.OperationId;
 import com.emo.sajou.domain.utilisation.Utilisation;
 
 public class CartoucheTest {
@@ -107,13 +108,13 @@ public class CartoucheTest {
 		final Cartouche today = new Cartouche(compte, new Usage(new Service("foo"), new Service("bar")), Period.days(0), 30);
 		final Cartouche zero = new Cartouche(compte, new Usage(new Service("foo"), new Service("bar")), Period.days(30), 0);
 		final Cartouche negative = new Cartouche(compte, new Usage(new Service("foo"), new Service("bar")), Period.days(1).minus(Period.months(1)), -10);
-
-		assertFalse(expired.utilisablePour(new Utilisation(compte, expired.getId(), 20, new Usage(new Service("foo")))));
-		assertTrue(today.utilisablePour(new Utilisation(compte, today.getId(), 30, new Usage(new Service("foo")))));
-		assertFalse(zero.utilisablePour(new Utilisation(compte, zero.getId(), 30, new Usage(new Service("foo")))));
-		assertFalse(negative.utilisablePour(new Utilisation(compte, negative.getId(), 30, new Usage(new Service("foo")))));
-		assertFalse(today.utilisablePour(new Utilisation(compte, new CartoucheId(), 10, new Usage(new Service("foo")))));
-		assertFalse(today.utilisablePour(new Utilisation(new NumeroCompte(), today.getId(), 10, new Usage(new Service("foo")))));
+		
+		assertFalse(expired.utilisablePour(new Utilisation(compte, expired.getId(), 20, new Usage(new Service("foo")), new OperationId())));
+		assertTrue(today.utilisablePour(new Utilisation(compte, today.getId(), 30, new Usage(new Service("foo")), new OperationId())));
+		assertFalse(zero.utilisablePour(new Utilisation(compte, zero.getId(), 30, new Usage(new Service("foo")), new OperationId())));
+		assertFalse(negative.utilisablePour(new Utilisation(compte, negative.getId(), 30, new Usage(new Service("foo")), new OperationId())));
+		assertFalse(today.utilisablePour(new Utilisation(compte, new CartoucheId(), 10, new Usage(new Service("foo")), new OperationId())));
+		assertFalse(today.utilisablePour(new Utilisation(new NumeroCompte(), today.getId(), 10, new Usage(new Service("foo")), new OperationId())));
 		
 	}
 

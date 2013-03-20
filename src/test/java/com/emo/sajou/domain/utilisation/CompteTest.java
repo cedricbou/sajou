@@ -17,6 +17,7 @@ import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.Compte;
 import com.emo.sajou.domain.compte.NonSolvableException;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.Operation;
 
 public class CompteTest {
 
@@ -48,7 +49,7 @@ public class CompteTest {
 		
 		final Compte compte = new Compte(Arrays.asList(c1, c2, c3, c4, c5));
 
-		final UtilisationPlan plan = new UtilisationPlan(compte, 130, new Usage(new Service("bar")));
+		final UtilisationPlan plan = new UtilisationPlan(compte, new Operation(numero, new Usage(new Service("bar")), 130));
 				
 		try {
 			compte.appliquer(plan.utilisations());

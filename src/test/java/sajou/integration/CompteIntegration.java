@@ -24,6 +24,7 @@ import com.emo.sajou.domain.commons.SoldePourUsage;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NonSolvableException;
 import com.emo.sajou.domain.compte.NumeroCompte;
+import com.emo.sajou.domain.operation.Operation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext-init.xml")
@@ -131,7 +132,8 @@ public class CompteIntegration {
 		assertEquals(n + 54, soldeCompte.solde(compte, new Usage(cool)));
 		assertEquals(n + 54 + 24, soldeCompte.solde(compte, new Usage(great)));
 
-		utiliserCompte.utiliser(compte, 40, new Usage(great));
+		final Operation op1 = new Operation(compte, new Usage(great), 40);
+		utiliserCompte.utiliser(op1);
 
 		System.out.println("--> soldes : ");
 		for (final SoldePourUsage spu : soldeCompte.soldeParUsage(compte)) {
@@ -142,7 +144,8 @@ public class CompteIntegration {
 		assertEquals(n + 54 + 24 - 40, soldeCompte.solde(compte, new Usage(great)));
 		assertEquals(n + 54 - 40, soldeCompte.solde(compte, new Usage(cool)));
 
-		utiliserCompte.utiliser(compte, 17, new Usage(cool));
+		final Operation op2 = new Operation(compte, new Usage(cool), 17);
+		utiliserCompte.utiliser(op2);
 
 		System.out.println("--> soldes : ");
 		for (final SoldePourUsage spu : soldeCompte.soldeParUsage(compte)) {
@@ -154,13 +157,15 @@ public class CompteIntegration {
 		assertEquals(n - 3, soldeCompte.solde(compte,  new Usage(cool)));
 
 		timeProvider.offset(Period.months(8));
-		utiliserCompte.utiliser(compte, n + 54 + 24 - 40 - (14 + 3) - 3,  new Usage(great));
+		final Operation op3 = new Operation(compte, new Usage(great),  n + 54 + 24 - 40 - (14 + 3) - 3);
+		utiliserCompte.utiliser(op3);
 
 		assertEquals(3, soldeCompte.solde(compte, new Usage()));
 		assertEquals(3, soldeCompte.solde(compte, new Usage(great)));
 		assertEquals(3, soldeCompte.solde(compte, new Usage(cool)));
 
-		utiliserCompte.utiliser(compte, 3, new Usage(great));
+		final Operation op4 = new Operation(compte, new Usage(great), 3);
+		utiliserCompte.utiliser(op4);
 
 		System.out.println("--> soldes : ");
 		for (final SoldePourUsage spu : soldeCompte.soldeParUsage(compte)) {
@@ -172,7 +177,8 @@ public class CompteIntegration {
 		assertEquals(0, soldeCompte.solde(compte, new Usage(cool)));
 
 		try {
-			utiliserCompte.utiliser(compte, 4, new Usage(great));
+			final Operation op5 = new Operation(compte, new Usage(great),  4);
+			utiliserCompte.utiliser(op5);
 			fail("aurait du échouer car le solde est épuisé");
 		} catch (NonSolvableException nse) {
 
