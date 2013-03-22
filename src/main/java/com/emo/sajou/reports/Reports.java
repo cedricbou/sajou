@@ -23,7 +23,7 @@ public class Reports {
 	private @Final
 	MangoCQS cqs;
 
-	@Scheduled(cron="* */5 * * * *")
+	@Scheduled(cron="* * * 10 * *")
 	public void reportCCC() {
 		report("cedric.boufflers@gmail.com", "findCartoucheByCompte", "ccc");
 	}

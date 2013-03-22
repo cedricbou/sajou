@@ -5,15 +5,17 @@ import com.emo.mango.cqs.queries.annotations.QueryMap;
 public class OperationSummary {
 	public final String creation;
 	public final String usage;
-	public final Long montant;
+	public final String debit;
+	public final String credit;
 
 	public OperationSummary(@QueryMap("o.creationDate") String creation,
-		@QueryMap("o.servicesAsString") String usage, 
-		@QueryMap("o.montant") Long montant) {
+		@QueryMap("o.couleurs") String usage, 
+		@QueryMap("o.debit") String debit, @QueryMap("o.credit") String credit) {
 		
 		this.usage = usage;
 		this.creation = creation;
-		this.montant = montant;
+		this.debit = debit;
+		this.credit = credit;
 	}
 
 }

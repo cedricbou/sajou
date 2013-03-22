@@ -13,7 +13,7 @@ public interface CartoucheQueries extends Queries {
 	public List<CartoucheJpql> findCartoucheByCompte(
 			@QueryBind("compte") String compte);
 
-	@MangoSql("from Cartouche c where c.compte = :compte and c.solde >= :solde")
+	@MangoSql("from Cartouche c where c.numerocompte_compte = :compte and c.solde_solde >= :solde")
 	public List<CartoucheSql> findCartoucheByCompteAndSoldeAbove(
 			@QueryBind("compte") String numeroCompte,
 			@QueryBind("solde") int solde);

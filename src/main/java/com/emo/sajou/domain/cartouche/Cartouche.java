@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import com.emo.mango.annotations.Final;
 import com.emo.sajou.domain.commons.Solde;
 import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
@@ -39,6 +40,9 @@ public class Cartouche implements Comparable<Cartouche> {
 
 	@Embedded
 	private Solde solde;
+	
+	@Embedded
+	private @Final Solde soldeInitial;
 
 	public Cartouche(final NumeroCompte numeroCompte, final Usage usage,
 			final Period validite, final long montantInitial) {
@@ -47,6 +51,7 @@ public class Cartouche implements Comparable<Cartouche> {
 		this.validite = LocalDate.now().plus(validite);
 		this.numeroCompte = numeroCompte;
 		this.solde = new Solde(montantInitial);
+		this.soldeInitial = new Solde(montantInitial);
 	}
 
 	public CartoucheId getId() {
@@ -71,6 +76,10 @@ public class Cartouche implements Comparable<Cartouche> {
 
 	public Solde getSolde() {
 		return solde;
+	}
+	
+	public Solde getSoldeInitial() {
+		return soldeInitial;
 	}
 
 	public void deduire(final long montant) {

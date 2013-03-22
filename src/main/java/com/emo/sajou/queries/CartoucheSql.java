@@ -12,9 +12,9 @@ public class CartoucheSql {
 
 	public CartoucheSql(@QueryMap("c.creationDate") String creation,
 		@QueryMap("c.cartoucheId") String id, 
-		@QueryMap("c.servicesAsString") String usage, 
-		@QueryMap("c.compte") String compte, 
-		@QueryMap("c.solde") Long solde,
+		@QueryMap("c.usage_servicesAsString") String usage, 
+		@QueryMap("c.numerocompte_compte") String compte, 
+		@QueryMap("c.solde_solde") Long solde,
 		@QueryMap("c.validite") String validite) {
 		
 		this.id = id;

@@ -23,6 +23,7 @@ import com.emo.sajou.domain.commons.Usage;
 import com.emo.sajou.domain.compte.NumeroCompte;
 import com.emo.sajou.queries.CartoucheJpql;
 import com.emo.sajou.queries.CartoucheSql;
+import com.emo.sajou.queries.OperationSummary;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext-init.xml")
@@ -127,6 +128,37 @@ public class QueriesIntegration {
 			++i;
 		}
 
+	}
+	
+	@Test
+	public void testAllOperations() {
+		final DeposerSurCompte deposer = new DeposerSurCompte(cartouches);
+
+		final Service cool = new Service("cool");
+		final Service great = new Service("great");
+		final Usage envie = new Usage(cool, great);
+
+		final NumeroCompte compte = new NumeroCompte();
+		final long n = 10 + Math.round(Math.random() * 100);
+
+		deposer.deposer(compte, n, Period.months(12), envie);
+		deposer.deposer(compte, 25, Period.months(6), new Usage(new Service(
+				"something")));
+		deposer.deposer(compte, 35, Period.months(12), new Usage(new Service(
+				"something")));
+		for (int i = 0; i < 30; ++i) {
+			deposer.deposer(compte, 35 + i, Period.months(12 + i), new Usage(
+					new Service("cool")));
+		}
+
+		final QueryExecutor e = cqs.system().getQueryExecutor(
+				"allOperationsForCompte");
+
+		List<OperationSummary> ops = e.query(OperationSummary.class, compte.getCompte());
+
+		for (final OperationSummary op : ops) {
+			System.out.println(op);
+		}		
 	}
 	
 }
